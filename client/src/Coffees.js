@@ -1,7 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import './Card.css'
+import Card from './Card'
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./contexts/authContext";
 
 function Coffees() {
     const [coffees, setCoffees] = useState([])
+
+    const navigate = useNavigate()
+
+    const auth = useContext(AuthContext); // {currentUser, loading}
+
+    console.log(auth)
 
     useEffect(() => {
         fetch('/coffees', { 
@@ -16,22 +26,39 @@ function Coffees() {
         })       
     }, [])
 
-    console.log('coffees', coffees)
+    const onSignOut = () => {
+        fetch('/users/:id', { 
+            method: "DELETE", 
+            headers: {
+                "Content-Type": "application/json"
+            },          
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            console.log(data)
+            navigate('/')
+            
+        }) 
+    }
+
+    useEffect(() => {
+        if (!auth.loading && !auth.currentUser) {
+            navigate('/login')
+        }
+    }, [auth.loading, auth.currentUser, navigate])
+
+    if (!auth.currentUser) return null;
     
     return (
             <>
-                <h1 className="title"> Coffee </h1>
-                <ul className="getData">
+                <button type='button' onClick={onSignOut}>Logout</button>
+                <h1 className="title"> OUR SELECTIONS </h1>
                     {coffees.map((item) => {
-                        return <div key={item.id}>
-                            <div>Name: {item.name} </div>
-                            <div>Country: {item.country}</div>
-                            <div>Price: {item.price}</div>
-                        </div>
+                        return <Card key={item.id} coffee={item} />
                     })}
-                </ul>
             </>
         )
 }
 
 export default Coffees
+
