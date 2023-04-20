@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 
+
 function Signup() {
     const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
-        // email: "",
         username: "",
         password: "",
     });
@@ -23,7 +23,6 @@ function Signup() {
         })
         .then(resp => resp.json())
         .then(data => {
-            console.log(data)
             navigate("/coffees")
         })       
     }
@@ -34,19 +33,23 @@ function Signup() {
         })
     }
 
+    // function goLogin(){
+    //     navigate('/login')
+    // }
+
     return (
         <>
-          <h4 className="submitted">Submitted Cities</h4>
+          <h2 className="submitted"> Sign Up</h2>
           <form action= "#" onSubmit={handleSubmit} className="container">
             <div className="input_box">
-                <label htmlFor="email">
-                email:
+                <label htmlFor="username">
+                username:
                 <input
-                    placeholder="email"
+                    placeholder="username"
                     type="textarea"
-                    id="email"
+                    id="username"
                     onChange={handleChange}
-                    value={formData.email}
+                    value={formData.username}
                     required
                 />
                 </label>
@@ -63,12 +66,18 @@ function Signup() {
                     required
                 />
                 </label>
+
             </div>
 
             <input type="submit" value="Submit" className="sub"/>
             </form>
+                {/* Already have an account? <button type="button" onClick={goLogin}> Login </button> */}
             </>
 
 );
 }
 export default Signup;
+
+/*Create a unique username and password
+When people signup, they see the coffees
+*/

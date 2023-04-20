@@ -3,7 +3,7 @@ import './Card.css'
 
 function Card({ coffee }) {
     return (
-      <div className="card-container"  tabIndex="0" class="e-card e-card-horizontal">
+      <div className="card-container e-card e-card-horizontal "  tabIndex="0" >
         <div className="image-container">
           <img src={coffee.image_url} alt="coffeeimage" />
         </div>
@@ -23,5 +23,7 @@ function Card({ coffee }) {
       </div>
     );
 }
+
+
 
 export default Card;

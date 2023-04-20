@@ -9,7 +9,7 @@ function Coffees() {
 
     const navigate = useNavigate()
 
-    const auth = useContext(AuthContext); // {currentUser, loading}
+    const auth = useContext(AuthContext); 
 
     console.log(auth)
 
@@ -27,29 +27,30 @@ function Coffees() {
     }, [])
 
     const onSignOut = () => {
-        fetch('/users/:id', { 
+        fetch(`/users/${auth.currentUser.id}`, { 
             method: "DELETE", 
             headers: {
                 "Content-Type": "application/json"
             },          
         })
         .then(resp => resp.json())
-        .then(data => {
+        .then(data => { 
             console.log(data)
-            navigate('/')
-            
+            auth.setCurrentUser(undefined)
+            navigate('/')            
         }) 
     }
 
     useEffect(() => {
         if (!auth.loading && !auth.currentUser) {
-            navigate('/login')
+            navigate('/login') 
         }
     }, [auth.loading, auth.currentUser, navigate])
 
     if (!auth.currentUser) return null;
     
     return (
+                
             <>
                 <button type='button' onClick={onSignOut}>Logout</button>
                 <h1 className="title"> OUR SELECTIONS </h1>
@@ -57,6 +58,7 @@ function Coffees() {
                         return <Card key={item.id} coffee={item} />
                     })}
             </>
+            
         )
 }
 

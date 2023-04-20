@@ -10,8 +10,10 @@ Rails.application.routes.draw do
     resources :reviews, only: [:index, :show]
   end
 
-  resources :reviews, only: [:index, :show, :create]
+  resources :reviews, only: [:index, :show, :create, :update, :destroy]
 
-  post "/login", to: "session/create"
-
+  post "/login", to: "sessions#create"
+  # This login goes to our sessions controller and we move it to our create action
+  get "/auth", to: "users#show" 
+  delete "/users/:id", to: 'sessions#destroy'
 end
