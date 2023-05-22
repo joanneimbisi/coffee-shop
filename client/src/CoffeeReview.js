@@ -88,8 +88,10 @@ function CoffeeReview({ review, onUpdateReview, onDeleteReview }) {
    
 
     const renderReview = () => {
+        console.log(auth)
+        console.log(review)
         return  <div>
-            <div>User: {review.user?.username}</div>
+            <div>User: {review.username}</div>
             <div>Title: {review.title}</div>
             <div>Description: {review.description}</div>
          {auth.currentUser && review.user_id === auth.currentUser.id ? <button type="button" onClick={toggleShowEdit}>Edit</button> : null}
@@ -97,7 +99,7 @@ function CoffeeReview({ review, onUpdateReview, onDeleteReview }) {
     
         </div> 
     }
-    console.log(review)
+    
     return <div>
         {showEdit ? renderForm() : renderReview()}
     </div> 
@@ -106,4 +108,3 @@ function CoffeeReview({ review, onUpdateReview, onDeleteReview }) {
 export default CoffeeReview;
 
 
-// Show information about the user that left the review

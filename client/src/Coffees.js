@@ -1,31 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import './Card.css'
 import Card from './Card'
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./contexts/authContext";
 
-function Coffees() {
-    const [coffees, setCoffees] = useState([])
-
+function Coffees({coffees}) {
     const navigate = useNavigate()
 
     const auth = useContext(AuthContext); 
-
+    console.log(coffees, "coffees")
     console.log(auth)
+    
 
-    useEffect(() => {
-        fetch('/coffees', { 
-            method: "GET", 
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(resp => resp.json())
-        .then(data => {
-            setCoffees(data)
-        })       
-    }, [])
-
+    
     const onSignOut = () => {
         fetch(`/users/${auth.currentUser.id}`, { 
             method: "DELETE", 
@@ -48,6 +35,8 @@ function Coffees() {
     }, [auth.loading, auth.currentUser, navigate])
 
     if (!auth.currentUser) return null;
+
+   
     
     return (
                 
@@ -57,6 +46,12 @@ function Coffees() {
                     {coffees.map((item) => {
                         return <Card key={item.id} coffee={item} />
                     })}
+                
+                    {/* <li>{
+            auth.currentUser && JSON.stringify(renderMyCoffees())
+          }</li>
+                 */}
+      
             </>
             
         )

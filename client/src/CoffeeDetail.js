@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom'
 import CoffeeReview from "./CoffeeReview";
 import './form.css'
 
-function CoffeeDetail() {
+function CoffeeDetail({ coffees, setCoffees }) {
     const params = useParams();
     const [coffee, setCoffee] = useState();
     const [coffeeReviews, setCoffeeReviews] = useState([])
@@ -14,30 +14,15 @@ function CoffeeDetail() {
     });
 
     useEffect(() => {
-        fetch(`/coffees/${params.id}`, { 
-            method: "GET", 
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(resp => resp.json())
-        .then(data => {
-            setCoffee(data)
-        })     
-    }, [params.id])
+        const selectedCoffee = coffees.find(item => item.id.toString() === params.id);
+        if (selectedCoffee) {
+            setCoffee(selectedCoffee)
+            setCoffeeReviews(selectedCoffee.reviews)
+        }
+    }, [coffees, params.id])
 
-    useEffect(() => {
-        fetch(`/reviews?coffee_id=${params.id}`, { 
-            method: "GET", 
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(resp => resp.json())
-        .then(data => {
-            setCoffeeReviews(data)
-        })     
-    }, [params.id])
+
+ 
 
     function handleChange(event){
         setFormData({
@@ -57,24 +42,35 @@ function CoffeeDetail() {
         })
         .then(resp => resp.json())
         .then(data => {
-            setCoffeeReviews([data, ...coffeeReviews])
+            const modifiedCoffeeIndex = coffees.findIndex(item => item.id.toString() === params.id)
+            const modifiedCoffee = { ...coffee, reviews: [data, ...coffeeReviews] }
+            const updatedCoffees = [...coffees]
+            updatedCoffees[modifiedCoffeeIndex] = modifiedCoffee
+            setCoffees(updatedCoffees)
         })       
     }
 
     const onDeleteReview = (reviewId) =>{
-        const updatedReviews =coffeeReviews.filter(cr => {
+        const modifiedCoffeeIndex = coffees.findIndex(item => item.id.toString() === params.id)
+        const updatedReviews = coffeeReviews.filter(cr => {
             return cr.id !== reviewId 
         })
-        setCoffeeReviews(updatedReviews)
+        const modifiedCoffee = { ...coffee, reviews: updatedReviews }
+        const updatedCoffees = [...coffees]
+        updatedCoffees[modifiedCoffeeIndex] = modifiedCoffee
+        setCoffees(updatedCoffees)
     }
-   
+
    
     const onUpdateReview = (updatedReview) => {
         const updatedReviews =  coffeeReviews.map(cr => {
             return updatedReview.id === cr.id ? updatedReview : cr
         })
-
-        setCoffeeReviews(updatedReviews)
+        const modifiedCoffeeIndex = coffees.findIndex(item => item.id.toString() === params.id)
+        const modifiedCoffee = { ...coffee, reviews: updatedReviews }
+        const updatedCoffees = [...coffees]
+        updatedCoffees[modifiedCoffeeIndex] = modifiedCoffee
+        setCoffees(updatedCoffees)
     }
 
  

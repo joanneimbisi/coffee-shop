@@ -9,13 +9,14 @@ function NavBar() {
   
   const [active, setActive] = useState("nav_menu");
   const [icon, setIcon] = useState("nav_toggler");
+ 
 
   const navToggle = () => {
     if (active === "nav_menu") {
       setActive("nav_menu nav_active");
     } else setActive("nav_menu");
 
-    // Icon Toggler
+  
     if (icon === "nav_toggler") {
       setIcon("nav_toggler toggle");
     } else setIcon("nav_toggler");
@@ -39,6 +40,9 @@ function NavBar() {
           </li>
           <li>
             <NavLink to="/signup" className="nav_link">Signup</NavLink>
+          </li>
+          <li>
+          <NavLink to="/myreviews" className="nav_link">Reviews</NavLink>
           </li>
         </ul>
       </div>

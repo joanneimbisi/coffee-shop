@@ -4,18 +4,22 @@ class CoffeesController < ApplicationController
     
     def index
         coffees = Coffee.all
-        render json: coffees
+        render json: coffees, status: :ok
     end
 
     def show
         coffee = Coffee.find(params[:id])
-        render json: coffee
+        render json: coffee, status: :ok
     end
 
     private
-
+    
     def render_not_found_response
         render json: { error: "Coffee not found" }, status: :not_found
     end
     
 end
+
+
+
+

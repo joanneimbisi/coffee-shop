@@ -10,6 +10,7 @@ import "./form.css"
 */
 
 function Login(){
+    const [errors, setErrors] = useState([])
     const navigate = useNavigate();
 
     const auth = useContext(AuthContext);
@@ -23,9 +24,7 @@ function Login(){
       if (auth.currentUser) {
         navigate('/coffees')
       }
-      // else {
-      //   navigate('/login')
-      // }
+  
     }, [auth.currentUser, navigate])
 
     function handleSubmit(event) {
@@ -38,12 +37,16 @@ function Login(){
             },
             body: JSON.stringify(formData)
         })
-        .then(resp => resp.json())
-        .then(data => {
-          console.log(data)
-            if (!data.error) {
-              navigate('/coffees')
-            }
+        .then((resp) => {
+          if (resp.ok){
+           resp.json()
+          .then(navigate("/coffees"))
+          } else {
+            resp.json().then((errorData) => {
+              console.log(errorData.errors)
+              setErrors(errorData.errors)})
+          
+    }
         })       
     }
     function handleChange(event){
@@ -69,10 +72,19 @@ function Login(){
             </label>
             <button type='submit'> Login </button>
           </form>
-
+          {/* { errors && (
+                 <ul style={{ color: "red" }}>
+                 {errors.map((error) => (
+                     <li key={error}>{error}</li>
+                 ))}
+                 </ul>
+                 )}   */}
+                 <div style={{color:"red"}}>
+                  {errors}
+                 </div>
           </div>
 
-          // return <SignUp/>
+
        
         );
 }

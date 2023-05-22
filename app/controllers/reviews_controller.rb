@@ -2,6 +2,7 @@ class ReviewsController < ApplicationController
 rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
 skip_before_action :authorized, only: [:index, :show, :destroy]
 
+
     def index
         if params[:coffee_id]
             reviews = Review.where(coffee_id: params[:coffee_id]).order(created_at: :desc)
@@ -21,16 +22,17 @@ skip_before_action :authorized, only: [:index, :show, :destroy]
         render json: review, status: :created
     end
 
+        
     def update 
         review = Review.find_by(id: params[:id])
-        if review
-            review.user_id == session[:user_id] 
+            if review.user_id == session[:user_id] 
             review.update(review_params)
             render json: review, status: :accepted
         else
             render json: {error: "review not found"}, status: :not_found
         end
     end
+
 
     def destroy
         review = Review.find_by(id:params[:id])
@@ -42,6 +44,7 @@ skip_before_action :authorized, only: [:index, :show, :destroy]
         end 
     end
 
+
     private
 
     def render_unprocessable_entity(invalid)
@@ -52,3 +55,4 @@ skip_before_action :authorized, only: [:index, :show, :destroy]
         params.require(:review).permit(:title, :description, :coffee_id)
     end
 end
+
